@@ -61,24 +61,26 @@ async function run() {
         for (const tag of lab.tags) {
           if (comment.body.includes(tag)) {
             // If tag is found, add a new comment
-            const body = `We noticed a potential security issue related to **${tag}** - **${lab.title}**.\n
-              ${lab.description}\n
-              Please check out this lab [resource](${lab.permalink}) or this collection [${lab.collection}](${lab.permalink}) for more information.\n
+            const body = `
+ We noticed a potential security issue related to **${tag}** - **${lab.title}**.\n
+${lab.description}\n
+Please check out this lab [resource](${lab.permalink}) or this collection [${lab.collection}](${lab.permalink}) for more information.\n
               
-              The following users in your organization have already completed this lab:\n
-              - [Kevin Breen](${lab.permalink})\n
-              - [IMLKev](${lab.permalink})\n`;
+The following users in your organization have already completed this lab:\n
+- [Kevin Breen](${lab.permalink})\n
+- [IMLKev](${lab.permalink})\n`;
 
             core.debug(`Posting comment about tag: ${tag}`);
-            core.debug(`context.repository_owner: ${context.repository_owner}`);
-            core.debug(`context.repository: ${context.repository}`);
+            core.debug(context.repo);
+            core.debug(`context.repository_owner: ${context.payload.repository.owner.login}`);
+            core.debug(`context.repository: ${context.payload.repository.full_name}`);
             core.debug(`context.payload.pull_request.number: ${context.payload.pull_request.number}`);
 
+            const pull_request_number = context.payload.pull_request.number;
             await octokit.rest.issues.createComment({
-              owner: context.repository_owner,
-              repo: context.repository,
-              issue_number: context.payload.pull_request.number,
-              body: body,
+              ...context.repo,
+              issue_number: pull_request_number,
+              body: body
             });
           }
         }
