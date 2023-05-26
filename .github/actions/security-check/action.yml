@@ -1,0 +1,9 @@
+name: 'Security Check'
+description: 'Checks PR comments for security vulnerability keywords'
+inputs:
+  GITHUB_TOKEN:
+    description: 'GitHub token'
+    required: true
+runs:
+  using: 'node12'
+  main: 'index.js'
