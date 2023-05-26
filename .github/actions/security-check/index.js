@@ -71,13 +71,13 @@ async function run() {
 
             core.debug(`Posting comment about tag: ${tag}`);
             core.debug(context);
-            core.debug(`context.repository_owner: ${context.repository_owner}`);
-            core.debug(`context.repository: ${context.repository}`);
+            core.debug(`context.repository_owner: ${context.payload.repository.owner.login}`);
+            core.debug(`context.repository: ${context.payload.repository.full_name}`);
             core.debug(`context.payload.pull_request.number: ${context.payload.pull_request.number}`);
 
             await octokit.rest.issues.createComment({
-              owner: context.repository_owner,
-              repo: context.repository,
+              owner: context.payload.repository.owner.login,
+              repo: context.payload.repository.full_name,
               issue_number: context.payload.pull_request.number,
               body: body,
             });
