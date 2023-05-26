@@ -1,0 +1,23 @@
+name: Security Check on PR
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  security-check:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: |
+        cd .github/actions/security-check
+        npm install
+
+    - name: Security Comment Check
+      uses: ./.github/actions/security-check
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

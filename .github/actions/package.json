@@ -1,0 +1,17 @@
+{
+    "name": "immersive-labs-security-check",
+    "version": "1.0.0",
+    "description": "Checks PR comments for security vulnerability keywords and suggests matching practical labs",
+    "main": "index.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "MIT",
+    "dependencies": {
+      "@actions/core": "^1.2.6",
+      "@actions/github": "^4.0.0",
+      "node-fetch": "^2.6.6"
+    }
+  }
+  
