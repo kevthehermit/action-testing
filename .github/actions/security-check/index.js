@@ -32,13 +32,14 @@ async function run() {
     // Get client and context
     const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
     const context = github.context;
+    core.debug('Client and context obtained.');
 
     // Get languages used in the current repository
     const { data: languages } = await octokit.rest.repos.listLanguages({
       owner: context.repo.owner,
       repo: context.repo.repo,
     });
-    console.log(languages);
+    core.debug(`Languages used in this repository: ${Object.keys(languages)}`);
 
     // Get comments
     const { data: comments } = await octokit.rest.issues.listComments({
@@ -46,11 +47,13 @@ async function run() {
       repo: context.repo.repo,
       issue_number: context.issue.number,
     });
+    core.debug(`Number of comments in PR: ${comments.length}`);
 
     // Fetch security lab data
     const response = await fetch('https://athena-support.eu.ngrok.io/');
     const data = await response.json();
     const labs = data.labs;
+    core.debug(`Number of labs fetched: ${labs.length}`);
 
     // Check comments for lab tags
     for (const comment of comments) {
@@ -65,6 +68,8 @@ async function run() {
               The following users in your organization have already completed this lab:\n
               - [Kevin Breen](${lab.permalink})\n
               - [IMLKev](${lab.permalink})\n`;
+
+            core.debug(`Posting comment about tag: ${tag}`);
 
             await octokit.rest.issues.createComment({
               owner: context.repo.owner,
