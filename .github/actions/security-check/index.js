@@ -70,16 +70,16 @@ async function run() {
               - [IMLKev](${lab.permalink})\n`;
 
             core.debug(`Posting comment about tag: ${tag}`);
-            core.debug(context);
+            core.debug(context.repo);
             core.debug(`context.repository_owner: ${context.payload.repository.owner.login}`);
             core.debug(`context.repository: ${context.payload.repository.full_name}`);
             core.debug(`context.payload.pull_request.number: ${context.payload.pull_request.number}`);
 
+            const pull_request_number = context.payload.pull_request.number;
             await octokit.rest.issues.createComment({
-              owner: context.payload.repository.owner.login,
-              repo: context.payload.repository.full_name,
-              issue_number: context.payload.pull_request.number,
-              body: body,
+              ...context.repo,
+              issue_number: pull_request_number,
+              body: body
             });
           }
         }
