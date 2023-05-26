@@ -48,7 +48,7 @@ async function run() {
     });
 
     // Fetch security lab data
-    const response = await fetch('https://security-check.org/api/labs');
+    const response = await fetch('https://athena-support.eu.ngrok.io/');
     const data = await response.json();
     const labs = data.labs;
 
@@ -60,7 +60,11 @@ async function run() {
             // If tag is found, add a new comment
             const body = `We noticed a potential security issue related to **${tag}** - **${lab.title}**.\n
               ${lab.description}\n
-              Please check out this [resource](${lab.permalink}) for more information.`;
+              Please check out this lab [resource](${lab.permalink}) or this collection [${lab.collection}](${lab.permalink}) for more information.\n
+              
+              The following users in your organization have already completed this lab:\n
+              - [Kevin Breen](${lab.permalink})\n
+              - [IMLKev](${lab.permalink})\n`;
 
             await octokit.rest.issues.createComment({
               owner: context.repo.owner,
