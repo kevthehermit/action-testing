@@ -70,11 +70,14 @@ async function run() {
               - [IMLKev](${lab.permalink})\n`;
 
             core.debug(`Posting comment about tag: ${tag}`);
+            core.debug(`context.repository_owner: ${context.repository_owner}`);
+            core.debug(`context.repository: ${context.repository}`);
+            core.debug(`context.payload.pull_request.number: ${context.payload.pull_request.number}`);
 
             await octokit.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
+              owner: context.repository_owner,
+              repo: context.repository,
+              issue_number: context.payload.pull_request.number,
               body: body,
             });
           }
